@@ -29,5 +29,56 @@ export const Verification = {
             console.error("Erreur API:", error);
             return [];
         }
-    }
+    },
+
+    getFunction: async( typeLOc ) => {
+        const urls = _baseUrls+'get-fonction.html';
+        const params = { 'typeLoc': typeLOc };
+
+        try {
+            const response = await axios.get(urls,{ headers: headers ,params:params });
+            return response.data;
+        } catch (error) {
+            console.error("Erreur API:", error);
+            return [];
+        }
+    },
+
+    getDren: async() => {
+        const urls = _baseUrls+'get-dren.html';
+
+        try {
+            const response = await axios.get(urls,{ headers: headers });
+            return response.data;
+        } catch (error) {
+            console.error("Erreur API:", error);
+            return [];
+        }
+    },
+
+    getCisco: async( codeDren ) => {
+        const urls = _baseUrls+'get-cisco.html';
+        const params = { 'codeDren': codeDren }
+
+        try {
+            const response = await axios.get(urls,{ headers: headers ,params:params });
+            return response.data;
+        } catch (error) {
+            // console.error("Erreur API:", error);
+            return [];
+        }
+    },
+
+    getEtab: async( codeDren , codeCisco ,codeFonction) => {
+        const urls = _baseUrls+'get-etab.html';
+        const params = { 'codeDren': codeDren,'codeCisco':codeCisco,'codeFonction':codeFonction }
+
+        try {
+            const response = await axios.get(urls,{ headers: headers ,params:params });
+            return response.data;
+        } catch (error) {
+            // console.error("Erreur API:", error);
+            return [];
+        }
+    },
 }

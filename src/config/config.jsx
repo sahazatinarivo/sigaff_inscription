@@ -3,7 +3,7 @@
 |Configuration Base url
 |
 */
-export const API_URL = "http://localhost/projet/fiche-ecole/index.php/";
+export const API_URL = "http://localhost/projet/sigaff_api/index.php/";
 /*
 |
 |Configuration Base url media

@@ -3,8 +3,6 @@ import { HeaderPg } from "./include/header";
 import { CinPages } from "./searche-cin";
 import { ImPages } from "./searche-im";
 
-
-
 export const VerificationImPg = () => {
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setheight] = useState(window.innerHeight);
