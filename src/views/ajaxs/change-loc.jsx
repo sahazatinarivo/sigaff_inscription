@@ -2,19 +2,28 @@ import { useEffect,useState } from "react";
 import { Verification } from "../../services/VerificationApi";
 import { ChangeDren } from "./change-dren";
 import { ChangeCiscos } from "./change-cisco";
+import { ChangeDirs } from "./change-dir";
 
 export const ChangeLoc = ({ typeLoc }) => {
     let message;
     const [resFonct,setResFonct] = useState([]);
     const [resDren,setresDren] = useState([]);
+    const [resDir,setResDir] = useState([]);
+
     const [isDren,setIsDren] = useState(0);
     const [vrDren,setVrDren] = useState(false);
+
     const [isCisco,setIsCisco] = useState(0);
     const [vrCisco,setVrCisco] = useState(false);
+
+    const [isDir,setIsDir] = useState(0);
+    const [vrDir,setVrDir] = useState(false);
+
     const [presPost,setpresPost] = useState("");
 
     const dataFonct = Verification.getFunction(typeLoc.split('|')[1]);
     const dataDren = Verification.getDren();
+    const dataDir = Verification.getDir();
     const codeFonction = typeLoc.split('|')[0] ? typeLoc.split('|')[2] : null;
 
     const ChangeDrens = (e) => { 
@@ -30,11 +39,16 @@ export const ChangeLoc = ({ typeLoc }) => {
     const changePoste = (e) => { 
         setpresPost(e.target.value);
     }
-    
+
+    const ChangeDir = (e)  => { 
+        setIsDir(e.target.value);
+        setVrDir(true);
+    }
 
     useEffect(() => {
         dataFonct.then((res) => { setResFonct(res.data); });
         dataDren.then((res) => { setresDren(res.data); });
+        dataDir.then((res) => { setResDir(res.data); });
     }, []);
 
 
@@ -95,8 +109,44 @@ export const ChangeLoc = ({ typeLoc }) => {
         case 'direction':
             message = <>
                         <tr>
-                            <td style={{ textAlign:'right' }}>direction</td>
-                            <td>tsara ny tompo</td>
+                            <td style={{ textAlign:'right' }}>FONCTION</td>
+                            <td>
+                                <select className="form-control" style={{ textAlign:"center" }}>
+                                    <option value="0" >---FONCTION---</option>
+                                {resFonct.map((func) => (
+                                    <option key={func.id_fonction} value={func.id_fonction}>{func.fonction}</option>
+                                ))}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style={{ textAlign:'right' }}>DIRECTION</td>
+                            <td>
+                                <select className="form-control" style={{ textAlign:"center" }} value={isDir} onChange={ (e) => ChangeDir(e) }>
+                                    <option value="0" >---DIRECTION---</option>
+                                    { resDir ? resDir.map((dir) => (
+                                        <option key={dir.code_direction} value={dir.code_direction}>({dir.code_direction})-{dir.direction}</option>
+                                    )) : []}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style={{ textAlign:'right' }}>SERVICE</td>
+                            <td>
+                                <select className="form-control" style={{ textAlign:"center" }}>
+                                    <option value="0" >---SERVICE---</option>
+                                    { vrDir ?  <ChangeDirs codeDir={isDir}/> : <></> }
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style={{ textAlign:'right' }}>POSTE</td>
+                            <td>
+                                <input type="text" className="form-control" 
+                                                   placeholder="Preciser votre poste" 
+                                                   value={presPost} 
+                                                   onChange={changePoste}/>
+                            </td>
                         </tr>
                       </>;
           break;

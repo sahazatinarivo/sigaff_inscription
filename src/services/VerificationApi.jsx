@@ -81,4 +81,29 @@ export const Verification = {
             return [];
         }
     },
+
+    getDir: async() => {
+        const urls = _baseUrls+'get-dir.html';
+
+        try {
+            const response = await axios.get(urls,{ headers: headers });
+            return response.data;
+        } catch (error) {
+            // console.error("Erreur API:", error);
+            return [];
+        }
+    },
+    
+    getService: async(codeDir) => {
+        const urls = _baseUrls+'get-service.html';
+        const params = { 'codeDir': codeDir }
+
+        try {
+            const response = await axios.get(urls,{ headers: headers,params:params });
+            return response.data;
+        } catch (error) {
+            // console.error("Erreur API:", error);
+            return [];
+        }
+    }
 }
