@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react"
-import { Verification } from "../../services/VerificationApi"
+import { useEffect, useState } from "react";
+import { Verification } from "../../../../services/VerificationApi";
 
-export const ChangeDren = ( {codeDren} ) => {
+
+export const ChangeDrenChoix = ( {codeDren} ) => {
     const [resCisco,setResCisco] = useState([]);
     const dataCisco = Verification.getCisco(codeDren);
 
     useEffect(() => {
-        if(codeDren !== 0){
-            dataCisco.then((res) => { setResCisco(res.data); });
-        }
+        dataCisco.then((res) => { setResCisco(res.data); });
     }, [dataCisco]);
 
     return <>

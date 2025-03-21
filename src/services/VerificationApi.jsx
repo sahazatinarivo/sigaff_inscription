@@ -105,5 +105,42 @@ export const Verification = {
             // console.error("Erreur API:", error);
             return [];
         }
-    }
+    },
+
+    getDiv: async() => {
+        const urls = _baseUrls+'get-div.html';
+
+        try {
+            const response = await axios.get(urls,{ headers: headers });
+            return response.data;
+        } catch (error) {
+            // console.error("Erreur API:", error);
+            return [];
+        }
+    },
+
+    getServ: async() => {
+        const urls = _baseUrls+'get-service-dren.html';
+
+        try {
+            const response = await axios.get(urls,{ headers: headers });
+            return response.data;
+        } catch (error) {
+            // console.error("Erreur API:", error);
+            return [];
+        }
+    },
+
+    getCrinfp: async(codeDren) => {
+        const urls = _baseUrls+'get-crinfp.html';
+        const params = { 'codeDren': codeDren }
+
+        try {
+            const response = await axios.get(urls,{ headers: headers,params:params });
+            return response.data;
+        } catch (error) {
+            // console.error("Erreur API:", error);
+            return [];
+        }
+    },
 }

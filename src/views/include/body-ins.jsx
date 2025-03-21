@@ -1,13 +1,18 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import { useEffect, useState } from 'react';
-import { ChangeLoc } from '../ajaxs/change-loc';
+import { ChangeLoc } from '../ajaxs/localite/change-loc';
+import { ChangeLocChoix2 } from '../ajaxs/localite/change-loc-pst-2';
+import { ChangeLocChoix1 } from '../ajaxs/localite/change-loc-pst-1';
 
-export const BodyInscription = ({datas}) => {
-    const [isdata, setIsData] = useState([]);
+export const BodyInscription = ({datas,formData,setFormData}) => {
     const [numPhone, setNumPhone] = useState('');
     const [email,setEmail] = useState('');
     const [pstActuel,sePstActuel] = useState('');
     const [isLoc,setIsLoc] = useState(false);
+    const [choixUn,setChoixUn] = useState(0);
+    const [isChoixUn,setIsChoixUn] = useState(false);
+    const [choixDeux,setChoixDeux] = useState(0);choixDeux
+    const [isChoixDeux,setIsChoixDeux] = useState(false);
 
     const [matricule,setMatricule] = useState('');
     const [nomPrenom,setNomPrenom] = useState('');
@@ -21,6 +26,45 @@ export const BodyInscription = ({datas}) => {
     const changeLocalite = (e) => { 
         sePstActuel(e.target.value);
         setIsLoc(true);
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    }
+
+    const changeChoixUn= (e) => { 
+        setChoixUn(e.target.value);
+        setIsChoixUn(true);
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    }
+
+    const changeChoixDeux = (e) => {
+        setChoixDeux(e.target.value);
+        setIsChoixDeux(true);
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    }
+
+    const ChangePhone = (e) => {
+        setNumPhone(e.target.value);
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    }
+
+    
+    const ChangeEmail = (e) => {
+        setEmail(e.target.value);
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
     }
 
     useEffect(() => {
@@ -40,7 +84,7 @@ export const BodyInscription = ({datas}) => {
     return  <>
                 <div className='container-fluid'>
                     <div className='row'>
-                        <div className='col-md-6 col-sm-12 col-xs-12'>
+                        <div className='col-md-6 col-sm-12 col-xs-12' style={{ border: '3px dotted',borderRadius:'15px' }}>
                             <table className="table table-striped table-bordered table-lg">
                                 <thead>
                                     <tr>
@@ -80,9 +124,10 @@ export const BodyInscription = ({datas}) => {
                                     <td style={{ textAlign:'right' }}>N° TELEPHONE</td>
                                     <td>
                                         <input type="text" value={numPhone} 
-                                                           onChange={setNumPhone} 
+                                                           onChange={(e) => ChangePhone(e) } 
                                                            className='form-control'
-                                                           placeholder='Tapez votre numero telephone'/>
+                                                           placeholder='Tapez votre numero telephone'
+                                                           name='num_phone'/>
                                     </td>
                                 </tr>
                     
@@ -90,16 +135,17 @@ export const BodyInscription = ({datas}) => {
                                     <td style={{ textAlign:'right' }}>ADRESSE MAIL</td>
                                     <td>
                                         <input type="text" value={email} 
-                                                            onChange={setEmail} 
+                                                            onChange={(e) => ChangeEmail(e) } 
                                                             className='form-control'
-                                                            placeholder='Tapez votre adresse mail'/>
+                                                            placeholder='Tapez votre adresse mail'
+                                                            name='email'/>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div className='col-md-6 col-sm-12 col-xs-12'>
-                        <table className="table table-striped table-bordered table-lg">
+                        <div className='col-md-6 col-sm-12 col-xs-12' style={{ border: '3px dotted',borderRadius:'15px' }}>
+                            <table className="table table-striped table-bordered table-lg">
                                 <thead>
                                     <tr>
                                         <th colSpan={2} className='text-center'>POSTE ACTUEL DE L'AGENT</th>
@@ -109,7 +155,7 @@ export const BodyInscription = ({datas}) => {
                                     <tr>
                                         <td style={{ textAlign:'right' }}>TYPE LOCALITE</td>
                                         <td >
-                                            <select className="form-control tloc-choise" style={{ textAlign:'center' }} name="type_loc0" data-nposte="0" value={pstActuel} onChange={(e) => changeLocalite(e) }>
+                                            <select className="form-control tloc-choise" style={{ textAlign:'center' }} name="type_loc0" data-nposte="0" value={formData.type_loc0} onChange={changeLocalite}>
                                                 <option value="0">---TYPE LOC---</option>
                                                 <optgroup label="ETABLISSEMENT SCOLAIRE">
                                                     <option value="etab|7|0">PRESCO</option>
@@ -128,7 +174,77 @@ export const BodyInscription = ({datas}) => {
                                             </select>
                                         </td>
                                     </tr>
-                                    { isLoc ? <ChangeLoc typeLoc={pstActuel} /> : "" }
+                                    { isLoc ? <ChangeLoc typeLoc={pstActuel} formData={formData} setFormData={setFormData} /> : "" }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div className='row'>
+                        <div className='col-md-6 col-sm-12 col-xs-12'  style={{ border: '3px dotted',borderRadius:'15px' }}>
+                            <table className="table table-striped table-bordered table-lg">
+                                <thead>
+                                    <tr>
+                                        <th colSpan={2} className='text-center'>POSTE DEMANDE(1ere CHOIX)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style={{ textAlign:'right' }}>TYPE LOCALITE</td>
+                                        <td >
+                                            <select className="form-control tloc-choise" style={{ textAlign:'center' }} name="type_loc1" data-nposte="0" value={choixUn} onChange={(e) => changeChoixUn(e) }>
+                                                <option value="0">---TYPE LOC---</option>
+                                                <optgroup label="ETABLISSEMENT SCOLAIRE">
+                                                    <option value="etab|7|0">PRESCO</option>
+                                                    <option value="etab|8|1">PRIMAIRE</option>
+                                                    <option value="etab|9|2">COLLEGE</option>
+                                                    <option value="etab|10|3">LYCEE</option>
+                                                </optgroup>
+                                                    <optgroup label="MEN CENTRAL">
+                                                    <option value="direction|5">DIRECTION</option>
+                                                </optgroup>
+                                                    <optgroup label="BUREAU DREN / BUREAU CISCO / CRINFP">
+                                                    <option value="cisco|3">CISCO</option>
+                                                    <option value="crinfp|4">CRINFP</option>
+                                                    <option value="dren|2">DREN</option>
+                                                </optgroup>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    { isChoixUn ? <ChangeLocChoix1 typeLoc={choixUn} formData={formData} setFormData={setFormData} /> : "" }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className='col-md-6 col-sm-12 col-xs-12'  style={{ border: '3px dotted',borderRadius:'15px' }}>
+                            <table className="table table-striped table-bordered table-lg">
+                                <thead>
+                                    <tr>
+                                        <th colSpan={2} className='text-center'>POSTE DEMANDE(2ème CHOIX)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style={{ textAlign:'right' }}>TYPE LOCALITE</td>
+                                        <td >
+                                            <select className="form-control tloc-choise" style={{ textAlign:'center' }} name="type_loc2" data-nposte="0" value={choixDeux} onChange={(e) => changeChoixDeux(e) }>
+                                                <option value="0">---TYPE LOC---</option>
+                                                <optgroup label="ETABLISSEMENT SCOLAIRE">
+                                                    <option value="etab|7|0">PRESCO</option>
+                                                    <option value="etab|8|1">PRIMAIRE</option>
+                                                    <option value="etab|9|2">COLLEGE</option>
+                                                    <option value="etab|10|3">LYCEE</option>
+                                                </optgroup>
+                                                    <optgroup label="MEN CENTRAL">
+                                                    <option value="direction|5">DIRECTION</option>
+                                                </optgroup>
+                                                    <optgroup label="BUREAU DREN / BUREAU CISCO / CRINFP">
+                                                    <option value="cisco|3">CISCO</option>
+                                                    <option value="crinfp|4">CRINFP</option>
+                                                    <option value="dren|2">DREN</option>
+                                                </optgroup>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    { isChoixDeux ? <ChangeLocChoix2 typeLoc={choixDeux} formData={formData} setFormData={setFormData} /> : "" }
                                 </tbody>
                             </table>
                         </div>

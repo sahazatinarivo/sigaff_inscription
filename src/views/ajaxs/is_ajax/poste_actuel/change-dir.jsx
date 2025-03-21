@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
-import { Verification } from "../../services/VerificationApi"
+import { Verification } from "../../../../services/VerificationApi";
 
-export const ChangeDirs = ({codeDir}) => {
+export const ChangeDirsPosteAcuel = ({codeDir}) => {
     const [resService,setResService] = useState([]);
     const dataService = Verification.getService(codeDir);
 
     useEffect(() => {
         dataService.then((res) => { setResService(res.data); });
-    }, [dataService]);
+    }, [resService]);
 
     return <>
                 { resService ? resService.map((ser) => (

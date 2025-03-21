@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react"
-import { Verification } from "../../services/VerificationApi"
+import { Verification } from "../../../../services/VerificationApi";
 
-export const ChangeCiscos = ( {codeDren,codeCisco,codeFonction} ) => {
+export const ChangeCiscosPosteAcuel = ( {codeDren,codeCisco,codeFonction} ) => {
     const [resEtab,setResEtab] = useState([]);
     const dataEtab = Verification.getEtab(codeDren,codeCisco,codeFonction);
 
     useEffect(() => {
-        if(codeDren !== 0 && codeCisco !== 0){
-            dataEtab.then((res) => { setResEtab(res.data); });
-        }
-    }, [dataEtab]);
+        dataEtab.then((res) => { setResEtab(res.data); });
+    }, [resEtab]);
 
     return <>
                 { resEtab ? resEtab.map((etab) => (
