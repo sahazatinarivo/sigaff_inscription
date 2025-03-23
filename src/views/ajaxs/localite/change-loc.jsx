@@ -1,112 +1,94 @@
 import { useEffect,useState } from "react";
 import { Verification } from "../../../services/VerificationApi";
-import { ChangeDrenPosteAcuel } from "../is_ajax/poste_actuel/change-dren";
-import { ChangeCiscosPosteAcuel } from "../is_ajax/poste_actuel/change-cisco";
-import { ChangeDirsPosteAcuel } from "../is_ajax/poste_actuel/change-dir";
+import { ListeCiscoPosteActuel } from "../is_ajax/poste_actuel/liste-cisco";
 import { ChangeCiscosDivisionPosteAcuel } from "../is_ajax/poste_actuel/Change-cisco-division";
 import { ChangeServiceDrenPosteAcuel } from "../is_ajax/poste_actuel/Change-service-dren";
 import { ChangeCinfpDrenPosteAcuel } from "../is_ajax/poste_actuel/change-crinfp-dren";
+import { ListeEtabsPosteAcuel } from "../is_ajax/poste_actuel/liste-etabs";
+import { ListeServicePosteAcuel } from "../is_ajax/poste_actuel/liste-service";
 
 export const ChangeLoc = ({ typeLoc,formData,setFormData }) => {
     let message;
-    const [resFonct,setResFonct] = useState([]);
-    const [resDren,setresDren] = useState([]);
-    const [resDir,setResDir] = useState([]);
-
-    const [isDren,setIsDren] = useState(0);
-    const [vrDren,setVrDren] = useState(false);
-
-    const [isCisco,setIsCisco] = useState(0);
-    const [vrCisco,setVrCisco] = useState(false);
-
-    const [isDir,setIsDir] = useState(0);
-    const [vrDir,setVrDir] = useState(false);
-
-    const [isCrinfp,setIsCrinfp] = useState(0);
-    const [etabs,setEtabs] = useState(0);
-    const [fonction,setFonction] = useState(0);
-    const [divCisco,setDivCisco] = useState(0);
-    const [presPost,setPresPost] = useState("");
-
     const dataFonct = Verification.getFunction(typeLoc.split('|')[1]);
     const dataDren = Verification.getDren();
     const dataDir = Verification.getDir();
-    const [dataCisco,setdataCisco] = useState(null);
-    const codeFonction = typeLoc.split('|')[0] ? typeLoc.split('|')[2] : null;
+    
+    const [valeurDren,setValeurDren] = useState(0);
+    const [valeurService,setValeurService] = useState(0);
 
-    const ChangeDrens = (e) => { 
-        setIsDren(e.target.value);
-        setVrDren(true)
+    const [listDir,setListDir] = useState(null);
+    const [listFonct,setListFonct] = useState(null);
+    const [listDren,setListDren] = useState(null);
+    const [dataCisco,setDataCisco] = useState(null);
+    const [listCisco,setListCisco] = useState(null);
+    const [dataEtabs,setDataEtabs] = useState(null);
+    const [listeEtabs,setListeEtabs] = useState(null);
+    const [dataServ,setDataServ] = useState(null);
+    const [listeServ,setListeServ] = useState(null);
+
+
+    const ChangeDrenToCisco = (e) => { 
+        setValeurDren(e.target.value);
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         });
-        setdataCisco(Verification.getCisco(e.target.value));
+
+        setDataCisco(Verification.getCisco(e.target.value));
     }
 
-    const ChangeCisco = (e) => { 
-        setIsCisco(e.target.value);
-        setVrCisco(true);
+    const ChangeCiscoToEtab = (e) => { 
+        const isNivoSelected = typeLoc.split('|')[2];
+
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         });
+
+        setDataEtabs(Verification.getEtab(valeurDren,e.target.value,isNivoSelected));
     }
 
-    const changePoste = (e) => { 
-        setPresPost(e.target.value);
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    }
-
-    const ChangeDir = (e)  => { 
-        setIsDir(e.target.value);
-        setVrDir(true);
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    }
-
-    const ChangeEtab = (e)  => { 
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    }
-
-    const ChangeFonction = (e)  => { 
+    const ChangeFonction = (e) => { 
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         });
     }
 
-    const ChangeDivCisco = (e)  => { 
+    const ChangeEtab = (e) => { 
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         });
     }
 
-    const ChangeCrinfp = (e)  => { 
-        setIsCrinfp(e.target.value);
+    const ChangeDirToService = (e) => { 
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+
+        setDataServ(Verification.getService(e.target.value));
+    }
+
+    const ChangeService = (e) => { 
+        setValeurService(e.target.value);
+
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         });
     }
-
 
     useEffect(() => {
-        dataFonct.then((res) => { setResFonct(res.data); });
-        dataDren.then((res) => { setresDren(res.data); });
-        dataDir.then((res) => { setResDir(res.data); });
+        dataFonct.then((res) => { setListFonct(res.data); });
+        dataDren.then((res) => { setListDren(res.data); });
+        dataDir.then((res) => { setListDir(res.data); });
     }, []);
 
-    dataCisco ? dataCisco.then((res) => { setIsCisco(res.data); }) : null;
+    dataCisco ? dataCisco.then((res) => { setListCisco(res.data); }) : null;
+    dataEtabs ? dataEtabs.then((res) => { setListeEtabs(res.data); }) : null;
+    dataServ ? dataServ.then((res) => { setListeServ(res.data); }) : null;
 
     switch (typeLoc.split('|')[0]) {
         case 'etab':
@@ -114,10 +96,10 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData }) => {
                         <tr>
                             <td style={{ textAlign:'right' }}>DREN</td>
                             <td>
-                                <select className="form-control" name="p0_dren" style={{ textAlign:"center" }} value={formData.p0_dren} onChange={ (e) => ChangeDrens(e) }>
+                                <select className="form-control" name="p0_dren" style={{ textAlign:"center" }} value={formData.p0_dren} onChange={ (e) => ChangeDrenToCisco(e) }>
                                     <option value="0" >---DREN---</option>
-                                    {resDren ? resDren.map((dren) => (
-                                        <option key={dren.code_dren} value={dren.code_dren}>{dren.dren}</option>
+                                    {listDren ? listDren.map((dren) => (
+                                        <option key={dren.code_dren} value={dren.code_dren} >{dren.dren}</option>
                                     )) : []}
                                 </select>
                             </td>
@@ -125,11 +107,9 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData }) => {
                         <tr>
                             <td style={{ textAlign:'right' }}>CISCO</td>
                             <td>
-                                <select className="form-control" name="p0_cisco" style={{ textAlign:"center" }} value={formData.p0_cisco} onChange={ (e) => ChangeCisco(e) }>
+                                <select className="form-control" name="p0_cisco" style={{ textAlign:"center" }} value={formData.p0_cisco} onChange={ (e) => ChangeCiscoToEtab(e) }>
                                     <option value="0" >---CISCO---</option>
-                                    {vrDren && isCisco ? isCisco.map((cisco) => (
-                                        <option key={cisco.code_cisco} value={cisco.code_cisco}>{cisco.cisco}</option>
-                                    )) : []}
+                                    { listCisco ? <ListeCiscoPosteActuel listCisco={listCisco} /> : <></> }
                                 </select>
                             </td>
                         </tr>
@@ -138,7 +118,7 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData }) => {
                             <td>
                                 <select className="form-control" name="p0_etab" value={formData.p0_etab} style={{ textAlign:"center" }} onChange={ (e) => ChangeEtab(e) }>
                                     <option value="0" >---ETABLISSEMENT---</option>
-                                    { vrCisco ? <ChangeCiscosPosteAcuel codeDren={isDren} codeCisco={isCisco} codeFonction={codeFonction}/> : <></> }
+                                    { listeEtabs ? <ListeEtabsPosteAcuel listeEtabs={listeEtabs} /> : <></> }
                                 </select>
                             </td>
                         </tr>
@@ -149,9 +129,9 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData }) => {
                         <tr>
                             <td style={{ textAlign:'right' }}>DIRECTION</td>
                             <td>
-                                <select className="form-control" name="p0_direction" style={{ textAlign:"center" }} value={formData.p0_direction} onChange={ (e) => ChangeDir(e) }>
+                                <select className="form-control" name="p0_direction" style={{ textAlign:"center" }} value={formData.p0_direction} onChange={ (e) => ChangeDirToService(e) }>
                                     <option value="0" >---DIRECTION---</option>
-                                    { resDir ? resDir.map((dir) => (
+                                    { listDir ? listDir.map((dir) => (
                                         <option key={dir.code_direction} value={dir.code_direction}>({dir.code_direction})-{dir.direction}</option>
                                     )) : []}
                                 </select>
@@ -160,9 +140,9 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData }) => {
                         <tr>
                             <td style={{ textAlign:'right' }}>SERVICE</td>
                             <td>
-                                <select className="form-control" name="p0_service" value={formData.p0_service_d} style={{ textAlign:"center" }}>
+                                <select className="form-control" name="p0_service" value={formData.p0_service} style={{ textAlign:"center" }} onChange={ (e) => ChangeService(e) }>
                                     <option value="0" >---SERVICE---</option>
-                                    { vrDir ?  <ChangeDirsPosteAcuel codeDir={isDir}/> : <></> }
+                                    { listeServ ?  <ListeServicePosteAcuel listServ={listeServ} /> : <></> }
                                 </select>
                             </td>
                         </tr>
@@ -260,9 +240,9 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData }) => {
                     <td>
                         <select className="form-control" name="p0_fonction" value={formData.p0_fonction} style={{ textAlign:"center" }} onChange={ (e) => ChangeFonction(e) }>
                             <option value="0" >---FONCTION---</option>
-                        {resFonct.map((func) => (
+                        { listFonct ? listFonct.map((func) => (
                             <option key={func.id_fonction} value={func.id_fonction}>{func.fonction}</option>
-                        ))}
+                        )) : []}
                         </select>
                     </td>
                 </tr>
@@ -273,7 +253,7 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData }) => {
                         <input type="text" className="form-control" 
                                             placeholder="Preciser votre poste" 
                                             value={formData.p0_poste} 
-                                            onChange={(e) => changePoste(e) }
+                                            onChange={(e) => ChangeLocForm(e) }
                                             name="p0_poste"/>
                     </td>
                 </tr>

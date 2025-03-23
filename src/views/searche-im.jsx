@@ -12,6 +12,7 @@ export const ImPages = () => {
     const runVerifIms = () => {
         setIsCharge(true);
         const _resIms = Verification.getIms(ims);
+
         _resIms.then((res) => {
             if(res._status == 'ok'){
                 setIsCharge(false);
@@ -36,7 +37,7 @@ export const ImPages = () => {
                     {isCharge ? <img src={icharge} width='20'/> : ``}
                 </center>
                 <center>
-                    <button type="button" id="btn-verification-im" className='btn btn-primary' onClick={(e) =>runVerifIms() }>Verifier</button>
+                    <button type="button" id="btn-verification-im" className='btn btn-primary' onClick={ (e) =>runVerifIms() }>Verifier</button>
                 </center>
            </>
 }
