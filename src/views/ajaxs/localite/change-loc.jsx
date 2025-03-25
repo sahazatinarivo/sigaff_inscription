@@ -1,11 +1,12 @@
 import { useEffect,useState } from "react";
 import { Verification } from "../../../services/VerificationApi";
 import { ListeCiscoPosteActuel } from "../is_ajax/poste_actuel/liste-cisco";
-import { ChangeCiscosDivisionPosteAcuel } from "../is_ajax/poste_actuel/Change-cisco-division";
 import { ChangeServiceDrenPosteAcuel } from "../is_ajax/poste_actuel/Change-service-dren";
 import { ChangeCinfpDrenPosteAcuel } from "../is_ajax/poste_actuel/change-crinfp-dren";
 import { ListeEtabsPosteAcuel } from "../is_ajax/poste_actuel/liste-etabs";
+import { ListeDivisionCPosteAcuel } from "../is_ajax/poste_actuel/liste-division-c";
 import { ListeServicePosteAcuel } from "../is_ajax/poste_actuel/liste-service";
+
 
 export const ChangeLoc = ({ typeLoc,formData,setFormData }) => {
     let message;
@@ -25,6 +26,8 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData }) => {
     const [listeEtabs,setListeEtabs] = useState(null);
     const [dataServ,setDataServ] = useState(null);
     const [listeServ,setListeServ] = useState(null);
+    const [dataDivC,setDataDivC] = useState(null);
+    const [listeDivC,setListeDivC] = useState(null);
 
 
     const ChangeDrenToCisco = (e) => { 
@@ -80,6 +83,17 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData }) => {
         });
     }
 
+    const ChangeCiscoToDiv = (e) => { 
+        setValeurService(e.target.value);
+
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+
+        setDataDivC(Verification.getDiv(e.target.value));
+    }
+
     useEffect(() => {
         dataFonct.then((res) => { setListFonct(res.data); });
         dataDren.then((res) => { setListDren(res.data); });
@@ -89,6 +103,7 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData }) => {
     dataCisco ? dataCisco.then((res) => { setListCisco(res.data); }) : null;
     dataEtabs ? dataEtabs.then((res) => { setListeEtabs(res.data); }) : null;
     dataServ ? dataServ.then((res) => { setListeServ(res.data); }) : null;
+    dataDivC ? dataDivC.then((res) => { setListeDivC(res.data); }) : null;
 
     switch (typeLoc.split('|')[0]) {
         case 'etab':
@@ -153,20 +168,20 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData }) => {
                         <tr>
                             <td style={{ textAlign:'right' }}>DREN</td>
                             <td>
-                                <select className="form-control" name="p0_dren" style={{ textAlign:"center" }} value={formData.p0_dren} onChange={ (e) => ChangeDrens(e) }>
+                                <select className="form-control" name="p0_dren" style={{ textAlign:"center" }} value={formData.p0_dren} onChange={ (e) => ChangeDrenToCisco(e) }>
                                     <option value="0" >---DREN---</option>
-                                    {resDren.map((dren) => (
-                                        <option key={dren.code_dren} value={dren.code_dren}>{dren.dren}</option>
-                                    ))}
+                                    {listDren ? listDren.map((dren) => (
+                                        <option key={dren.code_dren} value={dren.code_dren} >{dren.dren}</option>
+                                    )) : []}
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td style={{ textAlign:'right' }}>CISCO</td>
                             <td>
-                                <select className="form-control" name="p0_cisco" style={{ textAlign:"center" }} value={formData.p0_cisco} onChange={ (e) => ChangeCisco(e) }>
+                                <select className="form-control" name="p0_cisco" style={{ textAlign:"center" }} value={formData.p0_cisco} onChange={ (e) => ChangeCiscoToDiv(e) }>
                                     <option value="0" >---CISCO---</option>
-                                    { vrDren ?  <ChangeDrenPosteAcuel codeDren={isDren}/> : <></> }
+                                    { listCisco ? <ListeCiscoPosteActuel listCisco={listCisco} /> : <></> }
                                 </select>
                             </td>
                         </tr>
@@ -175,7 +190,7 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData }) => {
                             <td>
                                 <select className="form-control" name="p0_division_c" value={formData.p0_division_c} style={{ textAlign:"center" }} onChange={ (e) => ChangeDivCisco(e) }>
                                     <option value="0" >---DIVISION---</option>
-                                    { vrCisco ? <ChangeCiscosDivisionPosteAcuel /> : <></> }
+                                    { listeDivision ? <ListeDivisionCPosteAcuel listeDivision={listeDivC} /> : <></> }
                                 </select>
                             </td>
                         </tr>
