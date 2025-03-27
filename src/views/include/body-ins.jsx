@@ -13,6 +13,7 @@ export const BodyInscription = ({datas,formData,setFormData}) => {
     const [isChoixUn,setIsChoixUn] = useState(false);
     const [choixDeux,setChoixDeux] = useState(0);choixDeux
     const [isChoixDeux,setIsChoixDeux] = useState(false);
+    const [valeurPosteActuel,setValeurPosteActuel] = useState("");
 
     const [matricule,setMatricule] = useState('');
     const [nomPrenom,setNomPrenom] = useState('');
@@ -22,7 +23,14 @@ export const BodyInscription = ({datas,formData,setFormData}) => {
     const [grade,setGrade] = useState('');
     const [priseServ, setPriseServ] = useState('');
 
+    const ChangePosteActuel = (e) => { 
+        setValeurPosteActuel(valeurPosteActuel.toUpperCase());
 
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    }
     const changeLocalite = (e) => { 
         sePstActuel(e.target.value);
         setIsLoc(true);
@@ -175,6 +183,16 @@ export const BodyInscription = ({datas,formData,setFormData}) => {
                                         </td>
                                     </tr>
                                     { isLoc ? <ChangeLoc typeLoc={pstActuel} formData={formData} setFormData={setFormData} /> : "" }
+                                    <tr>
+                                        <td style={{ textAlign:'right' }}>POSTE</td>
+                                        <td>
+                                            <input type="text" className="form-control" 
+                                                                placeholder="Preciser votre poste" 
+                                                                value={valeurPosteActuel} 
+                                                                onChange={(e) => ChangePosteActuel(e) }
+                                                                name="p0_poste"/>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
