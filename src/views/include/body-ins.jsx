@@ -14,8 +14,12 @@ export const BodyInscription = ({datas,formData,setFormData}) => {
     const [isChoixUn,setIsChoixUn] = useState(false);
     const [choixDeux,setChoixDeux] = useState(0);choixDeux
     const [isChoixDeux,setIsChoixDeux] = useState(false);
-    const [valeurFonction,setValeurFonction] = useState(0);
-    const [listFonct,setListFonct] = useState(null);
+    const [valeurFonctionActuel,setValeurFonctionActuel] = useState(0);
+    const [valeurFonctionUn,setValeurFonctionUn] = useState(0);
+    const [valeurFonctionDeux,setValeurFonctionDeux] = useState(0);
+    const [listFonctActuel,setListFonctActuel] = useState(null);
+    const [listFonctUn,setListFonctUn] = useState(null);
+    const [listFonctDeux,setListFonctDeux] = useState(null);
 
     const [matricule,setMatricule] = useState('');
     const [nomPrenom,setNomPrenom] = useState('');
@@ -69,27 +73,44 @@ export const BodyInscription = ({datas,formData,setFormData}) => {
         });
     }
 
-    const ChangeFonction = (e) => { 
-        setValeurFonction(e.target.value);
+    const ChangeFonctionPosteActuel = (e) => { 
+        setValeurFonctionActuel(e.target.value);
 
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         });
+    }
 
-        if(typeLoc !== '0'){
-            if(typeLoc.split('|')[0] == 'direction'){
-                setDataDir(Verification.getDir());
-            }else{
-                
-                setDataDren(Verification.getDren());
-            }   
-        }
+    const ChangeFonctionChoixUn  = (e) => { 
+        setValeurFonctionUn(e.target.value);
+
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    }
+
+    const ChangeFonctionChoixDeux  = (e) => { 
+        setValeurFonctionDeux(e.target.value);
+
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
     }
 
     useEffect(() => {
-        pstActuel ? Verification.getFunction(pstActuel.split('|')[1]).then((res) => { setListFonct(res.data); }) : null;
+        pstActuel ? Verification.getFunction(pstActuel.split('|')[1]).then((res) => { setListFonctActuel(res.data); }) : null;
     }, [pstActuel]);
+
+    useEffect(() => {
+        choixUn ? Verification.getFunction(choixUn.split('|')[1]).then((res) => { setListFonctUn(res.data); }) : null;
+    }, [choixUn]);
+
+    useEffect(() => {
+        choixDeux ? Verification.getFunction(choixDeux.split('|')[1]).then((res) => { setListFonctDeux(res.data); }) : null;
+    }, [choixDeux]);
 
     useEffect(() => {
         datas.then((res) => {
@@ -201,15 +222,15 @@ export const BodyInscription = ({datas,formData,setFormData}) => {
                                     <tr>
                                         <td style={{ textAlign:'right' }}>FONCTION</td>
                                         <td>
-                                            <select className="form-control" name="p0_fonction" value={valeurFonction} style={{ textAlign:"center" }} onChange={ (e) => ChangeFonction(e) }>
+                                            <select className="form-control" name="p0_fonction" value={valeurFonctionActuel} style={{ textAlign:"center" }} onChange={ (e) => ChangeFonctionPosteActuel(e) }>
                                                 <option value="0" >---FONCTION---</option>
-                                            { listFonct ? listFonct.map((func) => (
+                                            { listFonctActuel ? listFonctActuel.map((func) => (
                                                 <option key={func.id_fonction} value={func.id_fonction}>{func.fonction}</option>
                                             )) : []}
                                             </select>
                                         </td>
                                     </tr>
-                                    { isLoc ? <ChangeLoc typeLoc={pstActuel} formData={formData} setFormData={setFormData} valeurFonction={valeurFonction}/> : "" }
+                                    { isLoc ? <ChangeLoc typeLoc={pstActuel} formData={formData} setFormData={setFormData} valeurFonction={setValeurFonctionActuel}/> : "" }
                                 </tbody>
                             </table>
                         </div>
@@ -248,15 +269,15 @@ export const BodyInscription = ({datas,formData,setFormData}) => {
                                     <tr>
                                         <td style={{ textAlign:'right' }}>FONCTION</td>
                                         <td>
-                                            <select className="form-control" name="p1_fonction" value={valeurFonction} style={{ textAlign:"center" }} onChange={ (e) => ChangeFonction(e) }>
+                                            <select className="form-control" name="p1_fonction" value={valeurFonctionUn} style={{ textAlign:"center" }} onChange={ (e) => ChangeFonctionChoixUn(e) }>
                                                 <option value="0" >---FONCTION---</option>
-                                            { listFonct ? listFonct.map((func) => (
+                                            { listFonctUn ? listFonctUn.map((func) => (
                                                 <option key={func.id_fonction} value={func.id_fonction}>{func.fonction}</option>
                                             )) : []}
                                             </select>
                                         </td>
                                     </tr>
-                                    {/* { isChoixUn ? <ChangeLocChoix1 typeLoc={choixUn} formData={formData} setFormData={setFormData} /> : "" } */}
+                                    { isChoixUn ? <ChangeLocChoix1 typeLoc={choixUn} formData={formData} setFormData={setFormData} valeurFonction={valeurFonctionUn} /> : "" }
                                 </tbody>
                             </table>
                         </div>
@@ -293,15 +314,15 @@ export const BodyInscription = ({datas,formData,setFormData}) => {
                                     <tr>
                                         <td style={{ textAlign:'right' }}>FONCTION</td>
                                         <td>
-                                            <select className="form-control" name="p2_fonction" value={valeurFonction} style={{ textAlign:"center" }} onChange={ (e) => ChangeFonction(e) }>
+                                            <select className="form-control" name="p2_fonction" value={valeurFonctionDeux} style={{ textAlign:"center" }} onChange={ (e) => ChangeFonctionChoixDeux(e) }>
                                                 <option value="0" >---FONCTION---</option>
-                                            { listFonct ? listFonct.map((func) => (
+                                            { listFonctDeux ? listFonctDeux.map((func) => (
                                                 <option key={func.id_fonction} value={func.id_fonction}>{func.fonction}</option>
                                             )) : []}
                                             </select>
                                         </td>
                                     </tr>
-                                    {/* { isChoixDeux ? <ChangeLocChoix2 typeLoc={choixDeux} formData={formData} setFormData={setFormData} /> : "" } */}
+                                    { isChoixDeux ? <ChangeLocChoix2 typeLoc={choixDeux} formData={formData} setFormData={setFormData} valeurFonction={setValeurFonctionDeux} /> : "" }
                                 </tbody>
                             </table>
                         </div>

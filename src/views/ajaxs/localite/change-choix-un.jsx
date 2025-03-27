@@ -1,13 +1,13 @@
 import { useEffect,useState } from "react";
 import { Verification } from "../../../services/VerificationApi";
-import { ListeCiscoPosteActuel } from "../is_ajax/poste_actuel/liste-cisco";
-import { ListeServiceDrenPosteAcuel } from "../is_ajax/poste_actuel/liste-service-dren";
-import { ListeCrinfpPosteAcuel } from "../is_ajax/poste_actuel/liste-crinfp";
-import { ListeEtabsPosteAcuel } from "../is_ajax/poste_actuel/liste-etabs";
-import { ListeServicePosteAcuel } from "../is_ajax/poste_actuel/liste-service";
-import { ListeDivisionPosteActuel } from "../is_ajax/poste_actuel/liste-division";
+import { ListeCisco } from "../is_ajax/liste-cisco";
+import { ListeServiceDren } from "../is_ajax/liste-service-dren";
+import { ListeCrinfp } from "../is_ajax/liste-crinfp";
+import { ListeEtabs } from "../is_ajax/liste-etabs";
+import { ListeService } from "../is_ajax/liste-service";
+import { ListeDivision } from "../is_ajax/liste-division";
 
-export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData }) => {
+export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData,valeurFonction }) => {
     let message;
 
     const [valeurDren,setValeurDren] = useState(0);
@@ -18,7 +18,7 @@ export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData }) => {
     const [valeurDivision,setValeurDivision] = useState(0);
     const [valeurServiceD,setValeurServiceD] = useState(0);
     const [valeurCrinfp,setValeurCrinfp] = useState(0);
-    const [valeurPosteActuel,setValeurPosteActuel] = useState("");
+    const [valeurChoixUn,setValeurChoixUn] = useState("");
 
     const [listDir,setListDir] = useState(null);
     const [listDren,setListDren] = useState(null);
@@ -92,8 +92,8 @@ export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData }) => {
         });
     }
 
-    const ChangePosteActuel = (e) => { 
-        setValeurPosteActuel(e.target.value);
+    const ChangeChoixUn = (e) => { 
+        setValeurChoixUn(e.target.value);
 
         setFormData({
             ...formData,
@@ -179,7 +179,7 @@ export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData }) => {
                         <tr>
                             <td style={{ textAlign:'right' }}>DREN</td>
                             <td>
-                                <select className="form-control" name="p0_dren" style={{ textAlign:"center" }} value={valeurDren} onChange={ (e) => ChangeDrenToCisco(e) }>
+                                <select className="form-control" name="p1_dren" style={{ textAlign:"center" }} value={valeurDren} onChange={ (e) => ChangeDrenToCisco(e) }>
                                     <option value="0" >---DREN---</option>
                                     {listDren ? listDren.map((dren) => (
                                         <option key={dren.code_dren} value={dren.code_dren} >{dren.dren}</option>
@@ -190,18 +190,18 @@ export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData }) => {
                         <tr>
                             <td style={{ textAlign:'right' }}>CISCO</td>
                             <td>
-                                <select className="form-control" name="p0_cisco" style={{ textAlign:"center" }} value={valeurCisco} onChange={ (e) => ChangeCiscoToEtab(e) }>
+                                <select className="form-control" name="p1_cisco" style={{ textAlign:"center" }} value={valeurCisco} onChange={ (e) => ChangeCiscoToEtab(e) }>
                                     <option value="0" >---CISCO---</option>
-                                    { listCisco ? <ListeCiscoPosteActuel listCisco={listCisco} /> : <></> }
+                                    { listCisco ? <ListeCisco listCisco={listCisco} /> : <></> }
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td style={{ textAlign:'right' }}>ETABLISSEMENT SCOLAIRE</td>
                             <td>
-                                <select className="form-control" name="p0_etab" value={valeurEtab} style={{ textAlign:"center" }} onChange={ (e) => ChangeEtab(e) }>
+                                <select className="form-control" name="p1_etab" value={valeurEtab} style={{ textAlign:"center" }} onChange={ (e) => ChangeEtab(e) }>
                                     <option value="0" >---ETABLISSEMENT---</option>
-                                    { listeEtabs ? <ListeEtabsPosteAcuel listeEtabs={listeEtabs} /> : <></> }
+                                    { listeEtabs ? <ListeEtabs listeEtabs={listeEtabs} /> : <></> }
                                 </select>
                             </td>
                         </tr>
@@ -212,7 +212,7 @@ export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData }) => {
                         <tr>
                             <td style={{ textAlign:'right' }}>DIRECTION</td>
                             <td>
-                                <select className="form-control" name="p0_direction" style={{ textAlign:"center" }} value={valeurDirs} onChange={ (e) => ChangeDirToService(e) }>
+                                <select className="form-control" name="p1_direction" style={{ textAlign:"center" }} value={valeurDirs} onChange={ (e) => ChangeDirToService(e) }>
                                     <option value="0" >---DIRECTION---</option>
                                     { listDir ? listDir.map((dir) => (
                                         <option key={dir.code_direction} value={dir.code_direction}>({dir.code_direction})-{dir.direction}</option>
@@ -223,9 +223,9 @@ export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData }) => {
                         <tr>
                             <td style={{ textAlign:'right' }}>SERVICE</td>
                             <td>
-                                <select className="form-control" name="p0_service" value={valeurService} style={{ textAlign:"center" }} onChange={ (e) => ChangeService(e) }>
+                                <select className="form-control" name="p1_service" value={valeurService} style={{ textAlign:"center" }} onChange={ (e) => ChangeService(e) }>
                                     <option value="0" >---SERVICE---</option>
-                                    { listeServ ?  <ListeServicePosteAcuel listServ={listeServ} /> : <></> }
+                                    { listeServ ?  <ListeService listServ={listeServ} /> : <></> }
                                 </select>
                             </td>
                         </tr>
@@ -236,7 +236,7 @@ export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData }) => {
                         <tr>
                             <td style={{ textAlign:'right' }}>DREN</td>
                             <td>
-                                <select className="form-control" name="p0_dren" style={{ textAlign:"center" }} value={valeurDren} onChange={ (e) => ChangeDrenToCisco(e) }>
+                                <select className="form-control" name="p1_dren" style={{ textAlign:"center" }} value={valeurDren} onChange={ (e) => ChangeDrenToCisco(e) }>
                                     <option value="0" >---DREN---</option>
                                     {listDren ? listDren.map((dren) => (
                                         <option key={dren.code_dren} value={dren.code_dren} >{dren.dren}</option>
@@ -247,18 +247,18 @@ export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData }) => {
                         <tr>
                             <td style={{ textAlign:'right' }}>CISCO</td>
                             <td>
-                                <select className="form-control" name="p0_cisco" style={{ textAlign:"center" }} value={valeurCisco} onChange={ (e) => ChangeCiscoToDiv(e) }>
+                                <select className="form-control" name="p1_cisco" style={{ textAlign:"center" }} value={valeurCisco} onChange={ (e) => ChangeCiscoToDiv(e) }>
                                     <option value="0" >---CISCO---</option>
-                                    { listCisco ? <ListeCiscoPosteActuel listCisco={listCisco} /> : <></> }
+                                    { listCisco ? <ListeCisco listCisco={listCisco} /> : <></> }
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td style={{ textAlign:'right' }}>DIVISION</td>
                             <td>
-                                <select className="form-control" name="p0_division_c" value={valeurDivision} style={{ textAlign:"center" }} onChange={ (e) => ChangeDivCisco(e) }>
+                                <select className="form-control" name="p1_division_c" value={valeurDivision} style={{ textAlign:"center" }} onChange={ (e) => ChangeDivCisco(e) }>
                                     <option value="0" >---DIVISION---</option>
-                                    { listeDivC ? <ListeDivisionPosteActuel listeDiv={listeDivC} /> : <></> }
+                                    { listeDivC ? <ListeDivision listeDiv={listeDivC} /> : <></> }
                                 </select>
                             </td>
                         </tr>
@@ -269,7 +269,7 @@ export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData }) => {
                         <tr>
                             <td style={{ textAlign:'right' }}>DREN</td>
                             <td>
-                                <select className="form-control" name="p0_dren" style={{ textAlign:"center" }} value={valeurDren} onChange={ (e) => ChangeDrenToService(e) }>
+                                <select className="form-control" name="p1_dren" style={{ textAlign:"center" }} value={valeurDren} onChange={ (e) => ChangeDrenToService(e) }>
                                     <option value="0" >---DREN---</option>
                                     {listDren ? listDren.map((dren) => (
                                         <option key={dren.code_dren} value={dren.code_dren} >{dren.dren}</option>
@@ -280,9 +280,9 @@ export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData }) => {
                         <tr>
                             <td style={{ textAlign:'right' }}>SERVICE</td>
                             <td>
-                                <select className="form-control" name="p0_service_d" style={{ textAlign:"center" }} value={valeurServiceD} onChange={ (e) => ChangeServiceD(e) }>
+                                <select className="form-control" name="p1_service_d" style={{ textAlign:"center" }} value={valeurServiceD} onChange={ (e) => ChangeServiceD(e) }>
                                     <option value="0" >---SERVICE---</option>
-                                    { listeServD ?  <ListeServiceDrenPosteAcuel listeServiceDren={listeServD} /> : <></> }
+                                    { listeServD ?  <ListeServiceDren listeServiceDren={listeServD} /> : <></> }
                                 </select>
                             </td>
                         </tr>
@@ -293,7 +293,7 @@ export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData }) => {
                         <tr>
                             <td style={{ textAlign:'right' }}>DREN</td>
                             <td>
-                                <select className="form-control" name="p0_dren" style={{ textAlign:"center" }} value={valeurDren} onChange={ (e) => ChangeDrenToCrinfp(e) }>
+                                <select className="form-control" name="p1_dren" style={{ textAlign:"center" }} value={valeurDren} onChange={ (e) => ChangeDrenToCrinfp(e) }>
                                     <option value="0" >---DREN---</option>
                                     {listDren ? listDren.map((dren) => (
                                         <option key={dren.code_dren} value={dren.code_dren}>{dren.dren}</option>
@@ -304,9 +304,9 @@ export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData }) => {
                         <tr>
                             <td style={{ textAlign:'right' }}>CRINFP</td>
                             <td>
-                                <select className="form-control" name="p0_crinfp" style={{ textAlign:"center" }} value={valeurCrinfp} onChange={(e) => ChangeCrinfp(e) }>
+                                <select className="form-control" name="p1_crinfp" style={{ textAlign:"center" }} value={valeurCrinfp} onChange={(e) => ChangeCrinfp(e) }>
                                     <option value="0" >---CRINFP---</option>
-                                    { listeCrinfp ?  <ListeCrinfpPosteAcuel listeCrinfp={listeCrinfp}/> : <></> }
+                                    { listeCrinfp ?  <ListeCrinfp listeCrinfp={listeCrinfp}/> : <></> }
                                 </select>
                             </td>
                         </tr>
@@ -324,9 +324,9 @@ export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData }) => {
                     <td>
                         <input type="text" className="form-control" 
                                             placeholder="Preciser votre poste" 
-                                            value={valeurPosteActuel} 
-                                            onChange={(e) => ChangePosteActuel(e) }
-                                            name="p0_poste"/>
+                                            value={valeurChoixUn} 
+                                            onChange={(e) => ChangeChoixUn(e) }
+                                            name="p1_poste"/>
                     </td>
                 </tr>
             </>

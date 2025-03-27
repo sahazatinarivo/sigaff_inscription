@@ -9,10 +9,10 @@ export const MotifApi = {
         const urls = _baseUrls+'get-motif.html';
 
         try {
-            const response = await fetch(urls,{ headers: headers });
+            const response = await axios.get(urls,{ headers: headers });
             return response.data;
         } catch (error) {
-            // console.error("Erreur API:", error);
+            console.error("Erreur API:", error);
             return [];
         }
     },
