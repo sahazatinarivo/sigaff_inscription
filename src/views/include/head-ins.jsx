@@ -5,8 +5,6 @@ const logo = MEDIA_URL+"src/assets/images/men_icon.png";
 
 export const HeaderInscription = ({datas}) => {
     const [isdata, setIsData] = useState([]);
-    const [numPhone, setNumPhone] = useState('');
-    const [email,setEmail] = useState('');
 
     useEffect(() => {
         datas.then((res) => {

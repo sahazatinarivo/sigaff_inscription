@@ -1,5 +1,5 @@
 
-export const ListeCiscoPosteActuel = ( {listCisco} ) => {
+export const ListeCisco = ( {listCisco} ) => {
 
     return <>
                 { listCisco ? listCisco.map((cisco) => (

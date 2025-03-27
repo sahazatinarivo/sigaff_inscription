@@ -1,5 +1,5 @@
 
-export const ListeDivisionPosteActuel = ( {listeDiv} ) => {
+export const ListeDivision = ( {listeDiv} ) => {
 
     return <>
                 { listeDiv ? listeDiv.map((div) => (

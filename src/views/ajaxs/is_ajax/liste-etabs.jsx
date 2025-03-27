@@ -1,5 +1,5 @@
 
-export const ListeEtabsPosteAcuel = ( {listeEtabs} ) => {
+export const ListeEtabs = ( {listeEtabs} ) => {
 
     return <>
                 { listeEtabs ? listeEtabs.map((etab) => (

@@ -1,5 +1,5 @@
 
-export const ListeServicePosteAcuel = ({listServ}) => {
+export const ListeService = ({listServ}) => {
 
     return <>
                 { listServ ? listServ.map((ser) => (

@@ -1,5 +1,5 @@
 
-export const ListeServiceDrenPosteAcuel = ( {listeServiceDren} ) => {
+export const ListeServiceDren = ( {listeServiceDren} ) => {
 
     return <>
                 { listeServiceDren ? listeServiceDren.map((serv) => (

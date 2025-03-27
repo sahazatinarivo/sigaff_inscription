@@ -1,14 +1,13 @@
 import { useEffect,useState } from "react";
 import { Verification } from "../../../services/VerificationApi";
-import { ListeCisco } from "../is_ajax/liste-cisco";
-import { ListeServiceDren } from "../is_ajax/liste-service-dren";
-import { ListeCrinfp } from "../is_ajax/liste-crinfp";
-import { ListeEtabs } from "../is_ajax/liste-etabs";
-import { ListeService } from "../is_ajax/liste-service";
-import { ListeDivision } from "../is_ajax/liste-division";
+import { ListeCiscoPosteActuel } from "../is_ajax/poste_actuel/liste-cisco";
+import { ListeServiceDrenPosteAcuel } from "../is_ajax/poste_actuel/liste-service-dren";
+import { ListeCrinfpPosteAcuel } from "../is_ajax/poste_actuel/liste-crinfp";
+import { ListeEtabsPosteAcuel } from "../is_ajax/poste_actuel/liste-etabs";
+import { ListeServicePosteAcuel } from "../is_ajax/poste_actuel/liste-service";
+import { ListeDivisionPosteActuel } from "../is_ajax/poste_actuel/liste-division";
 
-
-export const ChangeLoc = ({ typeLoc,formData,setFormData,valeurFonction }) => {
+export const ChangeLocChoix1 = ({ typeLoc,formData,setFormData }) => {
     let message;
 
     const [valeurDren,setValeurDren] = useState(0);
@@ -193,7 +192,7 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData,valeurFonction }) => {
                             <td>
                                 <select className="form-control" name="p0_cisco" style={{ textAlign:"center" }} value={valeurCisco} onChange={ (e) => ChangeCiscoToEtab(e) }>
                                     <option value="0" >---CISCO---</option>
-                                    { listCisco ? <ListeCisco listCisco={listCisco} /> : <></> }
+                                    { listCisco ? <ListeCiscoPosteActuel listCisco={listCisco} /> : <></> }
                                 </select>
                             </td>
                         </tr>
@@ -202,7 +201,7 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData,valeurFonction }) => {
                             <td>
                                 <select className="form-control" name="p0_etab" value={valeurEtab} style={{ textAlign:"center" }} onChange={ (e) => ChangeEtab(e) }>
                                     <option value="0" >---ETABLISSEMENT---</option>
-                                    { listeEtabs ? <ListeEtabs listeEtabs={listeEtabs} /> : <></> }
+                                    { listeEtabs ? <ListeEtabsPosteAcuel listeEtabs={listeEtabs} /> : <></> }
                                 </select>
                             </td>
                         </tr>
@@ -226,7 +225,7 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData,valeurFonction }) => {
                             <td>
                                 <select className="form-control" name="p0_service" value={valeurService} style={{ textAlign:"center" }} onChange={ (e) => ChangeService(e) }>
                                     <option value="0" >---SERVICE---</option>
-                                    { listeServ ?  <ListeService listServ={listeServ} /> : <></> }
+                                    { listeServ ?  <ListeServicePosteAcuel listServ={listeServ} /> : <></> }
                                 </select>
                             </td>
                         </tr>
@@ -250,7 +249,7 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData,valeurFonction }) => {
                             <td>
                                 <select className="form-control" name="p0_cisco" style={{ textAlign:"center" }} value={valeurCisco} onChange={ (e) => ChangeCiscoToDiv(e) }>
                                     <option value="0" >---CISCO---</option>
-                                    { listCisco ? <ListeCisco listCisco={listCisco} /> : <></> }
+                                    { listCisco ? <ListeCiscoPosteActuel listCisco={listCisco} /> : <></> }
                                 </select>
                             </td>
                         </tr>
@@ -259,7 +258,7 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData,valeurFonction }) => {
                             <td>
                                 <select className="form-control" name="p0_division_c" value={valeurDivision} style={{ textAlign:"center" }} onChange={ (e) => ChangeDivCisco(e) }>
                                     <option value="0" >---DIVISION---</option>
-                                    { listeDivC ? <ListeDivision listeDiv={listeDivC} /> : <></> }
+                                    { listeDivC ? <ListeDivisionPosteActuel listeDiv={listeDivC} /> : <></> }
                                 </select>
                             </td>
                         </tr>
@@ -283,7 +282,7 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData,valeurFonction }) => {
                             <td>
                                 <select className="form-control" name="p0_service_d" style={{ textAlign:"center" }} value={valeurServiceD} onChange={ (e) => ChangeServiceD(e) }>
                                     <option value="0" >---SERVICE---</option>
-                                    { listeServD ?  <ListeServiceDren listeServiceDren={listeServD} /> : <></> }
+                                    { listeServD ?  <ListeServiceDrenPosteAcuel listeServiceDren={listeServD} /> : <></> }
                                 </select>
                             </td>
                         </tr>
@@ -307,7 +306,7 @@ export const ChangeLoc = ({ typeLoc,formData,setFormData,valeurFonction }) => {
                             <td>
                                 <select className="form-control" name="p0_crinfp" style={{ textAlign:"center" }} value={valeurCrinfp} onChange={(e) => ChangeCrinfp(e) }>
                                     <option value="0" >---CRINFP---</option>
-                                    { listeCrinfp ?  <ListeCrinfp listeCrinfp={listeCrinfp}/> : <></> }
+                                    { listeCrinfp ?  <ListeCrinfpPosteAcuel listeCrinfp={listeCrinfp}/> : <></> }
                                 </select>
                             </td>
                         </tr>

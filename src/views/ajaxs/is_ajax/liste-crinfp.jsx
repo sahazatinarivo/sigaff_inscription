@@ -1,5 +1,5 @@
 
-export const ListeCrinfpPosteAcuel = ( {listeCrinfp} ) => {
+export const ListeCrinfp = ( {listeCrinfp} ) => {
     return <>
                 { listeCrinfp ? listeCrinfp.map((crinfp) => (
                     <option key={crinfp.code_crinfp} value={crinfp.code_crinfp}>{crinfp.crinfp}</option>

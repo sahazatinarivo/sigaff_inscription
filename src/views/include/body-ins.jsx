@@ -1,19 +1,21 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import { useEffect, useState } from 'react';
 import { ChangeLoc } from '../ajaxs/localite/change-loc';
-import { ChangeLocChoix2 } from '../ajaxs/localite/change-loc-pst-2';
-import { ChangeLocChoix1 } from '../ajaxs/localite/change-loc-pst-1';
+import { ChangeLocChoix2 } from '../ajaxs/localite/change-choix-deux';
+import { ChangeLocChoix1 } from '../ajaxs/localite/change-choix-un';
+import { Verification } from '../../services/VerificationApi';
 
 export const BodyInscription = ({datas,formData,setFormData}) => {
     const [numPhone, setNumPhone] = useState('');
     const [email,setEmail] = useState('');
-    const [pstActuel,sePstActuel] = useState('');
+    const [pstActuel,sePstActuel] = useState(0);
     const [isLoc,setIsLoc] = useState(false);
     const [choixUn,setChoixUn] = useState(0);
     const [isChoixUn,setIsChoixUn] = useState(false);
     const [choixDeux,setChoixDeux] = useState(0);choixDeux
     const [isChoixDeux,setIsChoixDeux] = useState(false);
-    const [valeurPosteActuel,setValeurPosteActuel] = useState("");
+    const [valeurFonction,setValeurFonction] = useState(0);
+    const [listFonct,setListFonct] = useState(null);
 
     const [matricule,setMatricule] = useState('');
     const [nomPrenom,setNomPrenom] = useState('');
@@ -23,14 +25,6 @@ export const BodyInscription = ({datas,formData,setFormData}) => {
     const [grade,setGrade] = useState('');
     const [priseServ, setPriseServ] = useState('');
 
-    const ChangePosteActuel = (e) => { 
-        setValeurPosteActuel(valeurPosteActuel.toUpperCase());
-
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    }
     const changeLocalite = (e) => { 
         sePstActuel(e.target.value);
         setIsLoc(true);
@@ -74,6 +68,28 @@ export const BodyInscription = ({datas,formData,setFormData}) => {
             [e.target.name]: e.target.value,
         });
     }
+
+    const ChangeFonction = (e) => { 
+        setValeurFonction(e.target.value);
+
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+
+        if(typeLoc !== '0'){
+            if(typeLoc.split('|')[0] == 'direction'){
+                setDataDir(Verification.getDir());
+            }else{
+                
+                setDataDren(Verification.getDren());
+            }   
+        }
+    }
+
+    useEffect(() => {
+        pstActuel ? Verification.getFunction(pstActuel.split('|')[1]).then((res) => { setListFonct(res.data); }) : null;
+    }, [pstActuel]);
 
     useEffect(() => {
         datas.then((res) => {
@@ -163,7 +179,7 @@ export const BodyInscription = ({datas,formData,setFormData}) => {
                                     <tr>
                                         <td style={{ textAlign:'right' }}>TYPE LOCALITE</td>
                                         <td >
-                                            <select className="form-control tloc-choise" style={{ textAlign:'center' }} name="type_loc0" data-nposte="0" value={formData.type_loc0} onChange={changeLocalite}>
+                                            <select className="form-control tloc-choise" style={{ textAlign:'center' }} name="type_loc0" data-nposte="0" value={pstActuel} onChange={(e) => changeLocalite(e)}>
                                                 <option value="0">---TYPE LOC---</option>
                                                 <optgroup label="ETABLISSEMENT SCOLAIRE">
                                                     <option value="etab|7|0">PRESCO</option>
@@ -182,17 +198,18 @@ export const BodyInscription = ({datas,formData,setFormData}) => {
                                             </select>
                                         </td>
                                     </tr>
-                                    { isLoc ? <ChangeLoc typeLoc={pstActuel} formData={formData} setFormData={setFormData} /> : "" }
                                     <tr>
-                                        <td style={{ textAlign:'right' }}>POSTE</td>
+                                        <td style={{ textAlign:'right' }}>FONCTION</td>
                                         <td>
-                                            <input type="text" className="form-control" 
-                                                                placeholder="Preciser votre poste" 
-                                                                value={valeurPosteActuel} 
-                                                                onChange={(e) => ChangePosteActuel(e) }
-                                                                name="p0_poste"/>
+                                            <select className="form-control" name="p0_fonction" value={valeurFonction} style={{ textAlign:"center" }} onChange={ (e) => ChangeFonction(e) }>
+                                                <option value="0" >---FONCTION---</option>
+                                            { listFonct ? listFonct.map((func) => (
+                                                <option key={func.id_fonction} value={func.id_fonction}>{func.fonction}</option>
+                                            )) : []}
+                                            </select>
                                         </td>
                                     </tr>
+                                    { isLoc ? <ChangeLoc typeLoc={pstActuel} formData={formData} setFormData={setFormData} valeurFonction={valeurFonction}/> : "" }
                                 </tbody>
                             </table>
                         </div>
@@ -228,7 +245,18 @@ export const BodyInscription = ({datas,formData,setFormData}) => {
                                             </select>
                                         </td>
                                     </tr>
-                                    { isChoixUn ? <ChangeLocChoix1 typeLoc={choixUn} formData={formData} setFormData={setFormData} /> : "" }
+                                    <tr>
+                                        <td style={{ textAlign:'right' }}>FONCTION</td>
+                                        <td>
+                                            <select className="form-control" name="p1_fonction" value={valeurFonction} style={{ textAlign:"center" }} onChange={ (e) => ChangeFonction(e) }>
+                                                <option value="0" >---FONCTION---</option>
+                                            { listFonct ? listFonct.map((func) => (
+                                                <option key={func.id_fonction} value={func.id_fonction}>{func.fonction}</option>
+                                            )) : []}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    {/* { isChoixUn ? <ChangeLocChoix1 typeLoc={choixUn} formData={formData} setFormData={setFormData} /> : "" } */}
                                 </tbody>
                             </table>
                         </div>
@@ -262,7 +290,18 @@ export const BodyInscription = ({datas,formData,setFormData}) => {
                                             </select>
                                         </td>
                                     </tr>
-                                    { isChoixDeux ? <ChangeLocChoix2 typeLoc={choixDeux} formData={formData} setFormData={setFormData} /> : "" }
+                                    <tr>
+                                        <td style={{ textAlign:'right' }}>FONCTION</td>
+                                        <td>
+                                            <select className="form-control" name="p2_fonction" value={valeurFonction} style={{ textAlign:"center" }} onChange={ (e) => ChangeFonction(e) }>
+                                                <option value="0" >---FONCTION---</option>
+                                            { listFonct ? listFonct.map((func) => (
+                                                <option key={func.id_fonction} value={func.id_fonction}>{func.fonction}</option>
+                                            )) : []}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    {/* { isChoixDeux ? <ChangeLocChoix2 typeLoc={choixDeux} formData={formData} setFormData={setFormData} /> : "" } */}
                                 </tbody>
                             </table>
                         </div>
